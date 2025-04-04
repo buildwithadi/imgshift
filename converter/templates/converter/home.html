@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <h2>JPG to PNG Converter</h2>
+    
+    <form action="{% url 'convert_image' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="image" accept="image/jpeg">
+        <button type="submit">Convert to PNG</button>
+    </form>
+
+    <p id="message"></p>
+    <img id="convertedImage" style="display:none; max-width: 300px;">
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
