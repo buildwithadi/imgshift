@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.http import FileResponse, HttpResponse
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 from PIL import Image
 import os
+import zipfile
+from io import BytesIO
 
 # Ensure temp directory exists
 TEMP_DIR = os.path.join(settings.BASE_DIR, "temp")
@@ -13,39 +16,23 @@ def home(request):
     return render(request, "converter/home.html")
 
 def convert_image(request):
-    if request.method == "POST" and request.FILES.get("image"):
-        image_file = request.FILES["image"]  # Get the uploaded file
-        temp_image_path = os.path.join(TEMP_DIR, image_file.name)
+    if request.method == "POST":
+        files = request.FILES.getlist("images")
+        if not files:
+            return HttpResponse("No files were uploaded.")
 
-        # Save the uploaded file
-        with open(temp_image_path, "wb") as f:
-            for chunk in image_file.chunks():
-                f.write(chunk)
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w") as zip_file:
+            for file in files:
+                if file.name.endswith(".jpg") or file.name.endswith(".jpeg"):
+                    img = Image.open(file)
+                    file_name = os.path.splitext(file.name)[0] + ".png"
 
-        # Open the image using PIL (Pillow)
-        try:
-            image = Image.open(temp_image_path)
-        except Exception as e:
-            return render(request, "converter/home.html", {"error": f"Error opening image: {e}"})
+                    img_io = BytesIO()
+                    img.save(img_io, format="PNG")
+                    zip_file.writestr(file_name, img_io.getvalue())
 
-        # Define output path
-        output_path = temp_image_path.rsplit(".", 1)[0] + ".png"
+        zip_buffer.seek(0)
+        return FileResponse(zip_buffer, as_attachment=True, filename="converted_images.zip")
 
-        # Convert and save the image
-        image.save(output_path, "PNG")
-
-        # Read the converted file
-        with open(output_path, "rb") as f:
-            converted_image = f.read()
-
-        # Clean up temp files
-        os.remove(temp_image_path)
-        os.remove(output_path)
-
-        # Send file to user
-        from django.http import HttpResponse
-        response = HttpResponse(converted_image, content_type="image/png")
-        response["Content-Disposition"] = "attachment; filename=converted.png"
-        return response
-
-    return render(request, "converter/home.html", {"error": "No file uploaded."})
+    return HttpResponse("Invalid request.")

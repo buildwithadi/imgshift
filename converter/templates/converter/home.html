@@ -9,9 +9,9 @@
 <body>
     <h2>JPG to PNG Converter</h2>
     
-    <form action="{% url 'convert_image' %}" method="POST" enctype="multipart/form-data">
+    <form method="post" action="/convert/" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="image" accept="image/jpeg">
+        <input type="file" name="images" accept="image/jpeg" multiple required>
         <button type="submit">Convert to PNG</button>
     </form>
 
