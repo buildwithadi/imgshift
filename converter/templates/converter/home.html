@@ -11,7 +11,7 @@
     <div class="container">
         <h2>ImgShift Converter</h2>
         
-        <form method="post" action="{% url 'convert_image' %}" enctype="multipart/form-data">
+        <form id="uploadForm" method="post" action="{% url 'convert_image' %}" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- Conversion type dropdown -->
@@ -22,13 +22,13 @@
             </select><br><br>
 
             <!--file input-->
-            <input type="file" name="images" class="file-input" multiple required id="fileInput"><br>
+            <input type="file" name="images" class="file-input" multiple required id="fileInput"  max="50"><br>
             <button type="submit" class="convert-btn">CONVERT</button>
         </form>
     </div>
     <p id="message"></p>
     <img id="convertedImage" style="display:none; max-width: 300px;">
 
-    <script src="{% static 'converter/js/script.js' %}"></script>
+    <!--<script src="{% static 'converter/js/script.js' %}"></script>-->
 </body>
 </html>
