@@ -9,12 +9,21 @@
 </head>
 <body>
     <div class="container">
-        <h2>JPG to PNG Converter</h2>
+        <h2>ImgShift Converter</h2>
         
-        <form method="post" action="/convert/" enctype="multipart/form-data">
+        <form method="post" action="{% url 'convert_image' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" name="images" accept="image/jpeg"  class="file-input" multiple required><br>
-            <button type="submit" class="convert-btn">Convert to PNG</button>
+
+            <!-- Conversion type dropdown -->
+            <label for="conversion_type">Select Conversion Type:</label><br>
+            <select name="conversion_type" id="conversion_type" class="dropdown">
+                <option value="jpg_to_png">JPG ➡️ PNG</option>
+                <option value="png_to_jpg">PNG ➡️ JPG</option>
+            </select><br><br>
+
+            <!--file input-->
+            <input type="file" name="images" class="file-input" multiple required id="fileInput"><br>
+            <button type="submit" class="convert-btn">CONVERT</button>
         </form>
     </div>
     <p id="message"></p>
