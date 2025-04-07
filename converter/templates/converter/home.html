@@ -1,23 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Converter</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="{% static 'converter/css/styles.css' %}">
 </head>
 <body>
-    <h2>JPG to PNG Converter</h2>
-    
-    <form method="post" action="/convert/" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="images" accept="image/jpeg" multiple required>
-        <button type="submit">Convert to PNG</button>
-    </form>
-
+    <div class="container">
+        <h2>JPG to PNG Converter</h2>
+        
+        <form method="post" action="/convert/" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="images" accept="image/jpeg"  class="file-input" multiple required><br>
+            <button type="submit" class="convert-btn">Convert to PNG</button>
+        </form>
+    </div>
     <p id="message"></p>
     <img id="convertedImage" style="display:none; max-width: 300px;">
 
-    <script src="/static/js/script.js"></script>
+    <script src="{% static 'converter/js/script.js' %}"></script>
 </body>
 </html>
