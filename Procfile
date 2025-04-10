@@ -1,1 +1,1 @@
-web: gunicorn jpg_to_png.wsgi
+web: gunicorn jpg_to_png.wsgi:application
