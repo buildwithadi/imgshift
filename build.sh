@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Install dependencies
+# Exit on error
+set -e
+
+echo "Installing requirements..."
 pip install -r requirements.txt
 
-# Migrate database (if needed)
-python manage.py migrate
-
-# Collect static files
+echo "Collecting static files..."
 python manage.py collectstatic --noinput
