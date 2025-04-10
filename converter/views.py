@@ -91,5 +91,6 @@ def convert_image(request):
 
             output_zip.seek(0)
             return FileResponse(output_zip, as_attachment=True, filename='converted_images.zip')
+            
 
     return render(request, 'home.html')
